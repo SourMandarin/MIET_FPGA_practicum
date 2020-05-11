@@ -43,6 +43,7 @@ button_check bt0
 
 button_check bt1
   (
+  .btn_i  ( !key_i[1]      ),
   .ondn_o ( button_down[1] ),
   .clk_i  ( clk100_i       )
   );

@@ -29,11 +29,6 @@ module button_check
   
 reg [1:0] sync;
 
-initial begin
-  sync[0] = 0;
-  sync[1] = 0;
-end
-
 always @ ( posedge clk_i ) begin
   sync[0] <= btn_i;
   sync[1] <= sync[0];

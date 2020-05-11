@@ -19,11 +19,10 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
 module dec_hex
   (
     input        [3:0]    in,
-	output reg   [6:0]    out
+    output reg   [6:0]    out
   );
 
 always @ ( * ) begin
@@ -43,8 +42,8 @@ always @ ( * ) begin
     4'hc : out = 7'b1000110;
     4'hd : out = 7'b0100001;
     4'he : out = 7'b0000110;
-    4'hf : out = 7'b0001110; 
-	default : out = 7'b1111111;
+    4'hf : out = 7'b0001110;
+    default : out = 7'b1111111;
 endcase
 end
 
