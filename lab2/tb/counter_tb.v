@@ -23,9 +23,9 @@
 module counter_tb
   (
   );
-    
+
 localparam CLK_FREQ_MHZ   = 50;
-localparam CLK_SEMIPERIOD = ( 1000 / CLK_FREQ_MHZ ) / 2;     
+localparam CLK_SEMIPERIOD = ( 1000 / CLK_FREQ_MHZ ) / 2;
 
 reg  [9:0]   sw_i;
 wire [9:0]   ledr_o;

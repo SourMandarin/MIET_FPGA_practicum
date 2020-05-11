@@ -29,8 +29,8 @@ module counter
   output [6:0] hex0_o,
   output [6:0] hex1_o
   );
-    
-reg  [9:0] p;  
+
+reg  [9:0] p;
 reg  [7:0] counter;
 wire [1:0] button_down;
 
@@ -41,15 +41,15 @@ button_check bt0
   .clk_i  ( clk100_i       )
   );
 
-button_check bt1
-  (
-  .btn_i  ( !key_i[1]      ),
-  .ondn_o ( button_down[1] ),
-  .clk_i  ( clk100_i       )
-  );
+//button_check bt1
+ // (
+ // .btn_i  ( !key_i[1]      ),
+ // .ondn_o ( button_down[1] ),
+ // .clk_i  ( clk100_i       )
+ // );
 
 always @ ( posedge clk100_i or negedge key_i[1] ) begin
-  if  ( button_down[1] ) begin
+  if ( key_i[1] ) begin
     p       <= 10'b0;
     counter <= 8'd0;
   end
@@ -64,14 +64,14 @@ assign ledr_o = p;
 
 dec_hex dec0
   (
-  .in( counter[7:4] ),
-  .out(hex0_o       )
+  .in  ( counter[7:4] ),
+  .out ( hex0_o       )
   );
 
 dec_hex dec1
   (
-  .in(counter[3:0] ),
-  .out(hex1_o      )
+  .in  ( counter[3:0] ),
+  .out ( hex1_o       )
   );
 
 endmodule
