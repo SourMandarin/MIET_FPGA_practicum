@@ -33,10 +33,11 @@ reg [1:0] sync;
 always @ ( posedge clk_i or negedge reset ) begin
   if ( !reset )
     sync <= 2'b0;
-  else begin
-    sync[0] <= btn_i;
-    sync[1] <= sync[0];
-       end
+  else
+    begin
+      sync[0] <= btn_i;
+      sync[1] <= sync[0];
+    end
 end
 
 assign ondn_o = ~sync[1] & sync[0];

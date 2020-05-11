@@ -36,6 +36,7 @@ wire [1:0] button_down;
 
 button_check bt0
   (
+  .reset  ( key_i[1]       ),
   .btn_i  ( !key_i[0]      ),
   .ondn_o ( button_down[0] ),
   .clk_i  ( clk100_i       )
@@ -49,7 +50,7 @@ button_check bt0
  // );
 
 always @ ( posedge clk100_i or negedge key_i[1] ) begin
-  if ( key_i[1] ) begin
+  if ( !key_i[1] ) begin
     p       <= 10'b0;
     counter <= 8'd0;
   end
