@@ -36,7 +36,6 @@ reg      [9:0]  p;
 reg      [7:0]  counter;
 integer         counter_int;
 wire     [2:0]  button_down;
-wire            button_2_down;
 
 button_check bt0
   (
@@ -61,32 +60,40 @@ button_check bt2
   .clk_i  ( clk100_i       )
   );
 
-always @ ( posedge clk100_i or negedge key_i[1] ) begin
+always @( posedge clk100_i or negedge key_i[1] ) begin
   if ( !key_i[1] ) begin
     p           <= 10'b0;
     counter     <= 8'd0;
     counter_int <= 'd0;
-    b_event     <= 1'b0;
+    b_event     <= 1'd0;
   end
   else begin
     if ( button_down[0] )
-      b_event <= 1'b1;
+      b_event <= 1'd1;
+    if ( b_event && button_down[2] ) begin
+      counter <= counter + 1'b1;
+      p       <= sw_i;
+      b_event <= 1'd0;
+    end
+    if ( key_i[0] )
+      b_event <= 1'd0;
+    counter_int <= counter;
   end
 end
 
-always @ ( * ) begin
-  if ( b_event ) begin
-    if ( button_down[2] ) begin
-      p       <= sw_i;
-      b_event <= 1'b0;
-      if ( counter == 8'd255 )
-        counter <= 8'd0;
-      else
-        counter <= counter + 1'b1;
-    end
-  end
-  counter_int <= counter;
-end
+//always @( * ) begin
+//  if ( b_event ) begin
+//    if ( button_down[2] ) begin
+//      p       = sw_i;
+//      b_event = 1'b0;
+//      if ( counter == 8'd255 )
+//        counter = 8'd0;
+//      else
+//        counter = counter + 1'b1;
+//    end
+//  end
+//  counter_int = counter;
+//end
 
 assign ledr_o = p;
 
