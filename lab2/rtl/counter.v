@@ -22,7 +22,6 @@
 module counter
   (
   input        clk100_i,
-  input        rstn_i,
   input  [9:0] sw_i,
   input  [2:0] key_i,
   output [9:0] ledr_o,
@@ -31,11 +30,11 @@ module counter
   output [6:0] hex2_o
   );
 
-reg             b_event;
-reg      [9:0]  p;
-reg      [7:0]  counter;
-integer         counter_int;
-wire     [2:0]  button_down;
+reg              b_event;
+reg      [9:0]   p;
+reg      [7:0]   counter;
+wire     [2:0]   button_down;
+wire     [11:0]  counter_dec;
 
 button_check bt0
   (
@@ -64,20 +63,20 @@ always @( posedge clk100_i or negedge key_i[1] ) begin
   if ( !key_i[1] ) begin
     p           <= 10'b0;
     counter     <= 8'd0;
-    counter_int <= 'd0;
     b_event     <= 1'd0;
   end
   else begin
     if ( button_down[0] )
       b_event <= 1'd1;
-    if ( b_event && button_down[2] ) begin
-      counter <= counter + 1'b1;
-      p       <= sw_i;
-      b_event <= 1'd0;
-    end
-    if ( key_i[0] )
-      b_event <= 1'd0;
-    counter_int <= counter;
+    else 
+      if ( b_event && button_down[2] ) begin
+        counter <= counter + 1'b1;
+        p       <= sw_i;
+        b_event <= 1'd0;
+      end
+      else
+        if ( key_i[0] )
+          b_event <= 1'd0;
   end
 end
 
@@ -97,21 +96,25 @@ end
 
 assign ledr_o = p;
 
+assign counter_dec[3:0] = counter % 4'd10;
+assign counter_dec[7:4] = counter % 8'd100 / 4'd10;
+assign counter_dec[11:8] = counter / 8'd100;
+
 dec_hex dec0
   (
-  .in  ( counter_int % 10 ),
+  .in  ( counter_dec[3:0] ),
   .out ( hex0_o           )
   );
 
 dec_hex dec1
   (
-  .in  ( ( counter_int % 100 ) / 10 ),
-  .out ( hex1_o                     )
+  .in  ( counter_dec[7:4] ),
+  .out ( hex1_o           )
   );
 
 dec_hex dec2
   (
-  .in  ( counter_int / 100 ),
+  .in  ( counter_dec[11:8] ),
   .out ( hex2_o            )
   );
 
