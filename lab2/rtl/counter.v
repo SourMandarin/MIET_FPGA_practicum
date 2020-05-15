@@ -30,7 +30,7 @@ module counter
   output [6:0] hex2_o
   );
 
-reg              b_event;
+reg              b_event     = 1'd1;
 reg      [9:0]   p;
 reg      [7:0]   counter;
 wire     [2:0]   button_down;
@@ -63,20 +63,19 @@ always @( posedge clk100_i or negedge key_i[1] ) begin
   if ( !key_i[1] ) begin
     p           <= 10'b0;
     counter     <= 8'd0;
-    b_event     <= 1'd0;
+    b_event     <= 1'd1;
   end
   else begin
-    if ( button_down[0] )
-      b_event <= 1'd1;
-    else 
-      if ( b_event && button_down[2] ) begin
+    if ( !key_i[0] && !button_down[0] && b_event ) begin
+      if ( button_down[2] ) begin
         counter <= counter + 1'b1;
         p       <= sw_i;
         b_event <= 1'd0;
       end
-      else
-        if ( key_i[0] )
-          b_event <= 1'd0;
+    end
+    else
+      if ( button_down[0] && !key_i[0] )
+        b_event <= 1'd1;
   end
 end
 
